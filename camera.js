@@ -13,7 +13,7 @@ window.addEventListener('load', () => {
     
         const hands = new Hands({
             locateFile: (file) => {
-                return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/${file}`;
+                return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/${file}`;
             }
         });
         
@@ -175,8 +175,8 @@ window.addEventListener('load', () => {
                     gestureIndicator.textContent = "Error AI: " + err.message;
                 }
             },
-            width: 200,
-            height: 150
+            width: 640,
+            height: 480
         });
         
         camera.start()

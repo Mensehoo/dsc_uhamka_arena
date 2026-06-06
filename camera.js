@@ -6,13 +6,22 @@ window.addEventListener('load', () => {
     const gestureIndicator = document.getElementById('gestureIndicator');
     
     if (typeof Hands === 'undefined' || typeof Camera === 'undefined') {
-        console.error("Library MediaPipe Hands gagal dimuat dari CDN.");
+        console.error("Library MediaPipe Hands gagal dimuat dari CDN. Hands is: " + typeof Hands + ", Camera is: " + typeof Camera);
         if (gestureIndicator) gestureIndicator.textContent = "Error: MP Gagal Dimuat";
     } else {
+        console.log("MediaPipe library detected. Initializing Hands...");
         if (gestureIndicator) gestureIndicator.textContent = "Meminta izin kamera...";
+        
+        if (videoElement) {
+            videoElement.addEventListener('play', () => console.log("[Webcam] Video play event fired"));
+            videoElement.addEventListener('playing', () => console.log("[Webcam] Video playing event fired"));
+            videoElement.addEventListener('error', (e) => console.error("[Webcam] Video error event fired:", e));
+            videoElement.addEventListener('loadedmetadata', () => console.log(`[Webcam] loadedmetadata: size = ${videoElement.videoWidth}x${videoElement.videoHeight}`));
+        }
     
         const hands = new Hands({
             locateFile: (file) => {
+                console.log(`[locateFile] Fetching asset: ${file}`);
                 return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/${file}`;
             }
         });
@@ -23,8 +32,14 @@ window.addEventListener('load', () => {
             minDetectionConfidence: 0.5,
             minTrackingConfidence: 0.5
         });
+        console.log("MediaPipe Hands object created and configured.");
         
+        let resultsCount = 0;
         hands.onResults((results) => {
+            resultsCount++;
+            if (resultsCount % 60 === 1) {
+                console.log(`[onResults] Count: ${resultsCount}, Hands found: ${results.multiHandLandmarks ? results.multiHandLandmarks.length : 0}`);
+            }
             // Clear canvas
             hudCtx.clearRect(0, 0, hudCanvas.width, hudCanvas.height);
             
@@ -165,9 +180,14 @@ window.addEventListener('load', () => {
             });
         }
         
+        let frameCount = 0;
         // Start camera automatic processing
         const camera = new Camera(videoElement, {
             onFrame: async () => {
+                frameCount++;
+                if (frameCount % 60 === 1) {
+                    console.log(`[onFrame] Count: ${frameCount}`);
+                }
                 try {
                     await hands.send({image: videoElement});
                 } catch (err) {

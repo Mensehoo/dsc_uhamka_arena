@@ -16,6 +16,32 @@
 </head>
 <body>
 
+<div id="debugLogBox" style="position:fixed; bottom:0; left:0; width:100%; max-height:120px; overflow-y:auto; background:rgba(0,0,0,0.9); color:#00ff00; font-family:monospace; font-size:9px; z-index:9999; padding:6px; border-top:2px solid #555;">
+    <strong>Console Debug:</strong> <button onclick="document.getElementById('debugLogBox').style.display='none'" style="float:right; padding:2px 5px; font-size:8px; border:1px solid #ff5555; background:#aa0000; color:white; cursor:pointer;">Close</button>
+    <div id="debugLogContent" style="margin-top:5px; line-height:1.2; font-family:monospace;"></div>
+</div>
+<script>
+(function() {
+    const logBox = document.getElementById('debugLogContent');
+    function log(msg, type = 'log') {
+        if (!logBox) return;
+        const div = document.createElement('div');
+        div.style.color = type === 'error' ? '#ff5555' : (type === 'warn' ? '#ffaa00' : '#00ff00');
+        div.textContent = `[${type.toUpperCase()}] ${msg}`;
+        logBox.appendChild(div);
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+    const _log = console.log;
+    const _error = console.error;
+    const _warn = console.warn;
+    console.log = function(...args) { _log.apply(console, args); log(args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' '), 'log'); };
+    console.error = function(...args) { _error.apply(console, args); log(args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' '), 'error'); };
+    console.warn = function(...args) { _warn.apply(console, args); log(args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' '), 'warn'); };
+    window.onerror = function(message, source, lineno, colno, error) { log(`${message} at ${source}:${lineno}:${colno}`, 'error'); return false; };
+    window.onunhandledrejection = function(event) { log(`Unhandled Rejection: ${event.reason}`, 'error'); };
+})();
+</script>
+
 <div class="webcam-hud">
     <div id="gestureIndicator" class="gesture-indicator">Kamera Memuat...</div>
     <video id="webcamVideo" autoplay playsinline muted></video>

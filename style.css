@@ -112,7 +112,11 @@ button:hover {
     z-index: 100;
 }
 .webcam-hud video {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
 }
 .webcam-hud canvas {
     width: 100%;

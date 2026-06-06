@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSC UHAMKA Arena Survival</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- MediaPipe scripts for hand tracking -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="webcam-hud">
+    <div id="gestureIndicator" class="gesture-indicator">Kamera Memuat...</div>
+    <video id="webcamVideo" autoplay playsinline muted></video>
+    <canvas id="hudCanvas" width="200" height="150"></canvas>
+</div>
+
+<div class="game-container">
+    <div class="info-panel">
+        <div id="timer">Waktu: 120s</div>
+        <div id="difficulty">Level: 1</div>
+    </div>
+    <div id="botIndicator" class="bot-indicator">🤖 BOT MODE</div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="messageOverlay" class="message-overlay">
+        <div class="message-box">
+            <h1>Survival</h1>
+            <p>Bertahan selama 2 menit! Gunakan WASD atau Panah untuk bergerak.</p>
+
+            <button id="startButton">Mulai Game</button>
+        </div>
+    </div>
+</div>
+
+<!-- Game Sound Tracks -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="backsound_game.wav" type="audio/wav">
+</audio>
+<audio id="loseSfx" preload="auto">
+    <source src="lose_sound.wav" type="audio/wav">
+</audio>
+<audio id="clickSfx" preload="auto">
+    <source src="click_sound.wav" type="audio/wav">
+</audio>
+<audio id="gotHitSfx" preload="auto">
+    <source src="got_hit.wav" type="audio/wav">
+</audio>
+<audio id="jumpSfx" preload="auto">
+    <source src="jump.wav" type="audio/wav">
+</audio>
+<audio id="winSfx" preload="auto">
+    <source src="win.mp3" type="audio/mpeg">
+</audio>
+<audio id="shieldSfx" preload="auto">
+    <source src="shield.wav" type="audio/wav">
+</audio>
+<audio id="shieldHitSfx" preload="auto">
+    <source src="shield_hit.wav" type="audio/wav">
+</audio>
+
+<!-- Externalized Logic Scripts -->
+<script src="game.js" defer></script>
+<script src="camera.js" defer></script>
+
+</body>
+</html>
